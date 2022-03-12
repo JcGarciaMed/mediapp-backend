@@ -1,43 +1,48 @@
-package com.greymatter.model;
+package com.greymatter.dto;
 
-import javax.persistence.Column;
+import javax.validation.constraints.Size;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import com.sun.istack.NotNull;
 
-
-@Entity
-//@Table(name = "tbl_paciente")
-public class Paciente {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+public class PacienteDTO {
 	private Integer idPaciente;
 	
-	@Column(name="nombres", nullable = false, length = 70)
+	@NotNull
+	@Size(min=3)
 	private String nombres;
 	
-	@Column(name="apellidos", nullable = false, length = 70)
+	@NotNull
+	@Size(min=3)
 	private String apellidos;
 	
-	@Column(name="dni", nullable = false, length = 8)
+	@NotNull
+	@Size(min=8)
 	private String dni;
 	
-	@Column(name="direccion", nullable = false, length = 150)
+	@NotNull
+	@Size(min=3, max=150)
 	private String direccion;
 	
-	@Column(name="telefono", nullable = false, length = 9)
+	@Size(min=9, max=9)
 	private String telefono;
 	
-	@Column(name="email", nullable = false, length = 55)
+	@NotNull
 	private String email;
-		
+	
+	
+	
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
 	public Integer getIdPaciente() {
 		return idPaciente;
-	}
+	}	
+	
 	public void setIdPaciente(Integer idPaciente) {
 		this.idPaciente = idPaciente;
 	}
@@ -71,12 +76,5 @@ public class Paciente {
 	public void setTelefono(String telefono) {
 		this.telefono = telefono;
 	}
-	public String getEmail() {
-		return email;
-	}
-	public void setEmail(String email) {
-		this.email = email;
-	}
-	
 	
 }
