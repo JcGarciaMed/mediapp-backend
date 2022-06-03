@@ -3,6 +3,8 @@ package com.greymatter.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,10 +24,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.greymatter.dto.ConsultaDTO;
 import com.greymatter.dto.ConsultaListaExamenDTO;
+import com.greymatter.dto.FiltroConsultaDTO;
 import com.greymatter.exception.ModeloNotFoundException;
 import com.greymatter.model.Consulta;
 import com.greymatter.model.Examen;
@@ -122,7 +126,27 @@ public class ConsultaController {
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).listarPorId(id));		
 		recurso.add(link1.withRel("examen-info"));		
 		return recurso;
+	}
+	
+	@GetMapping("/buscar")
+	public ResponseEntity<List<ConsultaDTO>> buscarFecha(@RequestParam(value = "fecha1") String fecha1, @RequestParam(value = "fecha2") String fecha2) {
+		List<Consulta> consultas = new ArrayList<>();
 
+		consultas = service.buscarFecha(LocalDateTime.parse(fecha1), LocalDateTime.parse(fecha2));
+		List<ConsultaDTO> consultasDTO = mapper.map(consultas, new TypeToken<List<ConsultaDTO>>() {}.getType());
+
+		return new ResponseEntity<>(consultasDTO, HttpStatus.OK);
+	}
+	
+	@PostMapping("/buscar/otros")
+	public ResponseEntity<List<ConsultaDTO>> buscarOtro(@RequestBody FiltroConsultaDTO filtro) {
+		List<Consulta> consultas = new ArrayList<>();
+
+		consultas = service.buscar(filtro.getDni(), filtro.getNombreCompleto());
+		
+		List<ConsultaDTO> consulasDTO = mapper.map(consultas, new TypeToken<List<ConsultaDTO>>() {}.getType());
+
+		return new ResponseEntity<List<ConsultaDTO>>(consulasDTO, HttpStatus.OK);
 	}
 	
 }
