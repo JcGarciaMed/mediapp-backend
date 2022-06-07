@@ -1,8 +1,10 @@
 package com.greymatter.service.impl;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
+import com.greymatter.dto.ConsultaResumenDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,6 +53,24 @@ public class ConsultaServiceImpl extends CRUDImpl<Consulta, Integer> implements 
 	public List<Consulta> buscarFecha(LocalDateTime fecha1, LocalDateTime fecha2) {
 		// TODO Auto-generated method stub
 		return repo.buscarFecha(fecha1, fecha2);
+	}
+
+	@Override
+	public List<ConsultaResumenDTO> listarResumen() {
+		//List<Object[]>
+		//[2,	"12/02/2022"]
+		//[2,	"19/02/2022"]
+		//[3,	"29/01/2022"]
+		List<ConsultaResumenDTO> consultas = new ArrayList<>();
+
+		repo.listarResumen().forEach(x -> {
+			ConsultaResumenDTO cr = new ConsultaResumenDTO();
+			cr.setCantidad(Integer.parseInt(String.valueOf(x[0])));
+			cr.setFecha(String.valueOf(x[1]));
+			consultas.add(cr);
+		});
+
+		return consultas;
 	}
 
 

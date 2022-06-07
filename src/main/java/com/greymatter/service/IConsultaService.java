@@ -3,6 +3,7 @@ package com.greymatter.service;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.greymatter.dto.ConsultaResumenDTO;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -17,4 +18,6 @@ public interface IConsultaService extends ICrud<Consulta, Integer> {
 	List<Consulta> buscar(String dni, String nombreCompleto);
 		
 	List<Consulta> buscarFecha(LocalDateTime fecha1, LocalDateTime fecha2);
+
+	List<ConsultaResumenDTO> listarResumen();
 }

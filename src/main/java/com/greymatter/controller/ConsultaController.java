@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
+import com.greymatter.dto.ConsultaResumenDTO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -147,6 +148,13 @@ public class ConsultaController {
 		List<ConsultaDTO> consulasDTO = mapper.map(consultas, new TypeToken<List<ConsultaDTO>>() {}.getType());
 
 		return new ResponseEntity<List<ConsultaDTO>>(consulasDTO, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/listarResumen")
+	public ResponseEntity<List<ConsultaResumenDTO>> listarResumen() {
+		List<ConsultaResumenDTO> consultas = new ArrayList<>();
+		consultas = service.listarResumen();
+		return new ResponseEntity<>(consultas, HttpStatus.OK);
 	}
 	
 }
