@@ -20,4 +20,6 @@ public interface IConsultaService extends ICrud<Consulta, Integer> {
 	List<Consulta> buscarFecha(LocalDateTime fecha1, LocalDateTime fecha2);
 
 	List<ConsultaResumenDTO> listarResumen();
+
+	byte[] generarReporte();
 }

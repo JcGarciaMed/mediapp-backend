@@ -1,11 +1,19 @@
 package com.greymatter.service.impl;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.greymatter.dto.ConsultaResumenDTO;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -71,6 +79,25 @@ public class ConsultaServiceImpl extends CRUDImpl<Consulta, Integer> implements 
 		});
 
 		return consultas;
+	}
+
+	@Override
+	public byte[] generarReporte() {
+		byte[] data = null;
+
+		Map<String, Object> parametros = new HashMap<>();
+		parametros.put("txt_titulo", "Prueba de titulo");
+
+		File file;
+		try {
+			file = new ClassPathResource("/reports/consultas.jasper").getFile();
+			JasperPrint print = JasperFillManager.fillReport(file.getPath(), parametros, new JRBeanCollectionDataSource(listarResumen()));
+			data = JasperExportManager.exportReportToPdf(print);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return data;
 	}
 
 
