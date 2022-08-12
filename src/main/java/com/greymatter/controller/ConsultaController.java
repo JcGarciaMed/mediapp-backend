@@ -3,6 +3,7 @@ package com.greymatter.controller;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,8 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 
 import com.greymatter.dto.ConsultaResumenDTO;
+import com.greymatter.model.Archivo;
+import com.greymatter.service.IArchivoService;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +39,7 @@ import com.greymatter.exception.ModeloNotFoundException;
 import com.greymatter.model.Consulta;
 import com.greymatter.model.Examen;
 import com.greymatter.service.IConsultaService;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -47,6 +51,9 @@ public class ConsultaController {
 	
 	@Autowired
 	private ModelMapper mapper;
+
+	@Autowired
+	private IArchivoService serviceArchivo;
 	
 	@GetMapping
 	//@RequestMapping(value = "/" , method = RequestMethod.GET)
@@ -163,6 +170,29 @@ public class ConsultaController {
 		byte[] data = null;
 		data = service.generarReporte();
 		return new ResponseEntity<>(data, HttpStatus.OK);
+	}
+
+	@PostMapping(value = "/guardarArchivo", consumes = { MediaType.MULTIPART_FORM_DATA_VALUE })
+	public ResponseEntity<Integer> guardarArchivo(@RequestParam("adjunto") MultipartFile file) throws Exception {
+		System.out.println("entro por aqui");
+		int rpta = 0;
+
+		Archivo ar = new Archivo();
+		ar.setFiletype(file.getContentType());
+		ar.setFilename(file.getOriginalFilename());
+		ar.setValue(file.getBytes());
+
+		rpta = serviceArchivo.guardar(ar);
+
+		return new ResponseEntity<Integer>(rpta, HttpStatus.OK);
+	}
+
+	@GetMapping(value = "/leerArchivo/{idArchivo}", produces = MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	public ResponseEntity<byte[]> leerArchivo(@PathVariable("idArchivo") Integer idArchivo) throws IOException {
+
+		byte[] arr = serviceArchivo.leerArchivo(idArchivo);
+
+		return new ResponseEntity<>(arr, HttpStatus.OK);
 	}
 	
 }
