@@ -25,7 +25,7 @@ public class Paciente {
 	@Column(name="dni", nullable = false, length = 8)
 	private String dni;
 	
-	@Column(name="direccion", nullable = false, length = 150)
+	@Column(name="direccion", nullable = true, length = 150)
 	private String direccion;
 	
 	@Column(name="telefono", nullable = false, length = 9)
@@ -33,7 +33,7 @@ public class Paciente {
 	
 	@Column(name="email", nullable = false, length = 55)
 	private String email;
-		
+
 
 	public Integer getIdPaciente() {
 		return idPaciente;
@@ -77,6 +77,6 @@ public class Paciente {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
+
+
 }

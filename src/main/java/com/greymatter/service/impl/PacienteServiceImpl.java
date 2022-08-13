@@ -1,6 +1,8 @@
 package com.greymatter.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.greymatter.model.Paciente;
@@ -20,6 +22,10 @@ public class PacienteServiceImpl extends CRUDImpl<Paciente, Integer> implements 
 		// TODO Auto-generated method stub
 		return repo;
 	}
-	
-	
+
+
+	@Override
+	public Page<Paciente> listarPageable(Pageable page) {
+		return repo.findAll(page);
+	}
 }

@@ -9,6 +9,8 @@ import java.util.stream.Collectors;
 import javax.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
@@ -110,6 +112,12 @@ public class PacienteController {
 		return recurso;
 
 	}
-	
+
+	@GetMapping("/pageable")
+	public ResponseEntity<Page<PacienteDTO>> listarPageable(Pageable page) throws Exception{
+		Page<PacienteDTO> pacientes = service.listarPageable(page).map(p -> mapper.map(p, PacienteDTO.class));
+
+		return new ResponseEntity<>(pacientes, HttpStatus.OK);
+	}
 	
 }
