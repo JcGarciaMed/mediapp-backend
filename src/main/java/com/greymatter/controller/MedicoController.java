@@ -13,6 +13,7 @@ import org.springframework.hateoas.EntityModel;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,9 @@ public class MedicoController {
 	private ModelMapper mapper;
 	
 	@GetMapping
+	//@RequestMapping(value = "/" , method = RequestMethod.GET)
+	//@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+	@PreAuthorize("@authServiceImpl.tieneAcceso('listar')")
 	public ResponseEntity<List<MedicoDTO>> listar() throws Exception{
 		List<MedicoDTO> lista = service.listar().stream().map(p->mapper.map(p, MedicoDTO.class)).collect(Collectors.toList());			
 		return new ResponseEntity<>(lista,HttpStatus.OK);
